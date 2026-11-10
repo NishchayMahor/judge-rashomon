@@ -47,4 +47,6 @@ Scale if H1 holds and FR(0.05) is larger than the noise floor by an amount that 
 - The human labels are expert votes from 2023, often from a single annotator.
 
 ## Deviations
-(none yet)
+- **2026-11-10, judge models (before any pilot verdicts were seen).** NIM has no Qwen or current Llama models, and Mistral-large-2 returns 404, so the 5 free judges are: DeepSeek v4.1-flash, Mistral-large-4, Gemma-4-31B and gpt-oss-20b (all on NIM), plus Nemotron-3-ultra via OpenRouter (free tier, pinned to the Nvidia provider with fallbacks off; the serving provider is logged on every call). max_tokens went from 1024 to 4096 so the reasoning models don't get cut off before giving a verdict.
+- **2026-11-10, 2 extra configs added (approved by Nishchay, before any pilot verdicts were seen).** "Claude via CLI": claude-haiku-5-5 and claude-sonnet-5-5 through the local `claude -p` CLI on his subscription, pairwise only (400 calls, pilot only). The CLI has no temperature setting, so these run at default sampling. They take part in the Rashomon set like any other config, and results are also reported with them left out. The pilot now has 12 configs.
+- **2026-11-10, retries.** A reply with no `[[...]]` verdict is retried up to twice before being cached as a parse failure.
