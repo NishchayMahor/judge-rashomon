@@ -106,13 +106,27 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cache", default=str(ROOT / "cache"))
     ap.add_argument("--boot", type=int, default=1000)
-    ap.add_argument("--noise", default="")  # comma list of configs with rep1, rep2
+    ap.add_argument("--noise", default="")
+    ap.add_argument("--no-cli", action="store_true")
+    ap.add_argument("--out", default="pilot_metrics.json")  # comma list of configs with rep1, rep2
     args = ap.parse_args()
     cache = Path(args.cache)
     items = json.loads((ROOT / "data" / "pilot_items.json").read_text())
-    V = {c: load_verdicts(cache, c, 0, items) for c in CONFIGS if (cache / "rep0" / c).exists()}
-    idx = np.arange(len(items))
-    res = {"n_items": len(items), "configs": {}}
+    # coverage: an item counts as covered when its cache file(s) exist (an unparsed reply is still covered)
+    def covered(c, rep=0):
+        mkey, fmt = c.split("-")
+        if fmt == "pair":
+            return [(cache / f"rep{rep}" / c / f"{it['id']}.json").exists() for it in items]
+        return [all((cache / f"rep{rep}" / c / f"{it['qid']}_{hashlib.sha1((it['question'] + it[f'ans_{s}']).encode()).hexdigest()[:12]}.json").exists()
+                    for s in ("a", "b")) for it in items]
+    cov = {c: covered(c) for c in CONFIGS if (cache / "rep0" / c).exists()}
+    full = [c for c in cov if np.mean(cov[c]) >= 0.9]
+    excluded = {c: float(np.mean(cov[c])) for c in cov if c not in full}
+    if args.no_cli:
+        full = [c for c in full if c.split("-")[0] not in ("haiku", "sonnet")]
+    idx = np.array([i for i in range(len(items)) if all(cov[c][i] for c in full)])
+    V = {c: load_verdicts(cache, c, 0, items) for c in full}
+    res = {"n_items": int(len(idx)), "excluded_low_coverage": excluded, "configs": {}}
     for c, v in V.items():
         res["configs"][c] = dict(kappa=kappa(items, v, idx), parse_fail=sum(x is None for x in v),
                                  tie_rate=float(np.mean([x == "tie" for x in v])),
@@ -126,12 +140,14 @@ def main():
         res["rashomon"][str(e)] = {**pt, **{f"{k}_se": float(np.nanstd([b[k] for b in bs])) for k in ("flip_rate", "tau", "ambiguity", "size")}}
     res["noise"] = {}
     for c in filter(None, args.noise.split(",")):
+        nidx = np.array([i for i in idx if all(covered(c, r)[i] for r in (1, 2))])
         reps = [load_verdicts(cache, c, r, items) for r in (0, 1, 2)]
-        pt = noise_stats(items, reps, idx)
-        bs = [noise_stats(items, reps, b) for b in boots]
+        pt = noise_stats(items, reps, nidx)
+        nb = [rng.choice(nidx, len(nidx)) for _ in range(args.boot)]
+        bs = [noise_stats(items, reps, b) for b in nb]
         res["noise"][c] = {**pt, **{f"{k}_se": float(np.nanstd([b[k] for b in bs])) for k in pt}}
     res["human_ceiling"] = human_ceiling()
-    out = ROOT / "results" / "pilot_metrics.json"
+    out = ROOT / "results" / args.out
     out.parent.mkdir(exist_ok=True)
     out.write_text(json.dumps(res, indent=1, default=float))
     print(json.dumps({k: res[k] for k in ("rashomon", "noise", "human_ceiling")}, indent=1, default=float))
