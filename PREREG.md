@@ -50,3 +50,17 @@ Scale if H1 holds and FR(0.05) is larger than the noise floor by an amount that 
 - **2026-11-10, judge models (before any pilot verdicts were seen).** NIM has no Qwen or current Llama models, and Mistral-large-2 returns 404, so the 5 free judges are: DeepSeek v4.1-flash, Mistral-large-4, Gemma-4-31B and gpt-oss-20b (all on NIM), plus Nemotron-3-ultra via OpenRouter (free tier, pinned to the Nvidia provider with fallbacks off; the serving provider is logged on every call). max_tokens went from 1024 to 4096 so the reasoning models don't get cut off before giving a verdict.
 - **2026-11-10, 2 extra configs added (approved by Nishchay, before any pilot verdicts were seen).** "Claude via CLI": claude-haiku-5-5 and claude-sonnet-5-5 through the local `claude -p` CLI on his subscription, pairwise only (400 calls, pilot only). The CLI has no temperature setting, so these run at default sampling. They take part in the Rashomon set like any other config, and results are also reported with them left out. The pilot now has 12 configs.
 - **2026-11-10, retries.** A reply with no `[[...]]` verdict is retried up to twice before being cached as a parse failure.
+- **2026-11-10, analysis amendment A1-A10 (after a literature pass, a blind red-team and AERS multiplicity guidance; before any pilot metrics were computed on real data).** Full reasoning in `judge-rashomon-research/04-dossier.md`. Partial kappas for 3 configs were seen once, by accident, during a code dry run on an incomplete cache. The amendment does not depend on them: every change comes from the red-team, which never saw any data.
+  - A1: select the set on one set of items and measure flips on others. Full run: select on these 200, measure on the 710 unused items. Pilot: 2-fold dry run by question.
+  - A2: eps on a dense grid from 0 to 0.20, primary 0.05. Also report paired-kappa SEs, how often each config lands in the set across bootstraps, and the whole curve.
+  - A3: primary null for H2 is the verdict-swap permutation (500 draws). The re-run noise floor is kept as a lower bound. H2 is now: permutation p < 0.05 for the mean flip rate inside the set (full run only).
+  - A4: the main metric is confident flips (both configs' 95% CIs exclude 0, opposite signs). Results are also split into clear pairs (human gap >= 0.15) and contested pairs.
+  - A5: parse failures and API errors count as missing; complete-case is primary. Configs need at least 90% coverage and at most 5% failures. Scoring failures as ties is a sensitivity path.
+  - A6: the primary analysis excludes the Claude CLI configs; the with-CLI version is a sensitivity path. Noise-floor configs come from eligible non-CLI configs only.
+  - A7: bootstrap resamples whole questions.
+  - A8: report tie rates alongside kappa. Full run: balance the order coin within each model pair, and judge a 40-item subset in both orders.
+  - A9: headline contrast is flips inside the set vs flips across all configs.
+  - A10: system score stays win rate with ties = 0.5. Kendall tau is tau-a over model pairs. These choices are fixed here; alternatives go only into a labelled multiverse figure.
+  - Pointwise scores outside 1-10 count as failures.
+  - gpt-oss: if it is still running at 2026-11-11 09:00 PT it is stopped. It enters the analysis only if it meets the A5 coverage rule.
+  - Null result: if inside-set flips are not above the permutation null, we report "validated judges disagree no more than chance on system conclusions", with the same prominence.

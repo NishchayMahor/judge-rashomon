@@ -1,6 +1,6 @@
 """Unattended pilot finish: wait for rep0, apply the gpt-oss cutoff, run the noise floor, then analyze.
 
-Noise configs = best pairwise and best pointwise by kappa among non-CLI configs (keeps the Claude CLI pilot-sized).
+Noise configs = best pairwise and best pointwise by complete-case kappa among eligible non-CLI configs.
 Usage: uv run python src/pilot_driver.py --cutoff 2026-11-11T09:00
 """
 import argparse, datetime, json, subprocess, sys, time
@@ -37,10 +37,15 @@ def main():
         time.sleep(60)
     log("rep0 done")
     items = json.loads((ROOT / "data" / "pilot_items.json").read_text())
-    idx = range(len(items))
-    ks = {c: kappa(items, load_verdicts(ROOT / "cache", c, 0, items), idx) for c in CONFIGS
-          if JUDGE_MODELS[c.split("-")[0]][0] != "cli" and (ROOT / "cache" / "rep0" / c).exists()}
-    noise = [max((c for c in ks if c.endswith(f)), key=ks.get) for f in ("-pair", "-point")]
+    ks = {}
+    for c in CONFIGS:  # non-CLI, >=90% coverage, <=5% failures, kappa on its own complete cases (amendment A5/A6)
+        if JUDGE_MODELS[c.split("-")[0]][0] == "cli" or not (ROOT / "cache" / "rep0" / c).exists():
+            continue
+        v = load_verdicts(ROOT / "cache", c, 0, items)
+        done = [x for x in v if x is not None]
+        if len(done) < 0.9 * len(items) or sum(x == "FAIL" for x in done) > 0.05 * len(done):
+            continue
+        ks[c] = kappa(items, v, [i for i, x in enumerate(v) if x not in (None, "FAIL")])
     log(f"noise configs {noise} kappas {[round(ks[c], 3) for c in noise]}")
     for rep in (1, 2):
         procs = [subprocess.Popen(["uv", "run", "python", "src/run_judges.py", "--configs", c, "--rep", str(rep),
@@ -48,9 +53,11 @@ def main():
         for p in procs:
             p.wait()
         log(f"rep{rep} done")
-    for extra, name in (([], "analyze.out"), (["--no-cli", "--out", "pilot_metrics_nocli.json"], "analyze_nocli.out")):
-        subprocess.run(["uv", "run", "python", "src/analyze.py", "--noise", ",".join(noise), *extra], cwd=ROOT,
-                       stdout=(ROOT / "logs" / name).open("w"), stderr=subprocess.STDOUT)
+    paths = (([], "pilot_metrics.json"), (["--with-cli"], "pilot_metrics_withcli.json"),
+             (["--ties-as-tie"], "pilot_metrics_tiesastie.json"))
+    for extra, out in paths:  # primary path first, then pre-declared sensitivity paths
+        subprocess.run(["uv", "run", "python", "src/analyze.py", "--noise", ",".join(noise), "--out", out, *extra],
+                       cwd=ROOT, stdout=(ROOT / "logs" / f"{out}.log").open("w"), stderr=subprocess.STDOUT)
     log("analysis done")
 
 
