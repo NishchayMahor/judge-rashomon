@@ -6,7 +6,7 @@ Prompts, parsing and decoding come from run_judges.py, unchanged. Cache: cache_a
 NIM requests are paced to stay under the free-tier rate limit (shared across threads).
 Usage: uv run python src/arena_run.py [--phase all|rep0|retry|noise] [--limit N]
 """
-import argparse, datetime, hashlib, json, re, shutil, threading, time
+import argparse, datetime, hashlib, json, os, re, shutil, threading, time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -21,9 +21,10 @@ STATUS = ROOT / "logs" / "arena_status"
 JUDGES = {"deepseek": "deepseek-ai/deepseek-v4.1-flash", "mistral": "mistralai/mistral-large-4-1t-a52b",
           "nemotron": "nvidia/nemotron-3-ultra-550b-a55b"}  # all on NIM (PREREG-arena pre-freeze change 3)
 CONFIGS = [f"{j}-{f}" for j in JUDGES for f in ("pair", "point")]
-WORKERS = {"deepseek": 24, "mistral": 6, "nemotron": 6}  # deepseek is slow (~230 s/call), so more in flight
+WORKERS = {"deepseek": 24, "mistral": 16, "nemotron": 3}  # nemotron low (deviation 2026-11-11a)  # deepseek is slow (~230 s/call), so more in flight
 TRANSIENT = re.compile(r"timed out|Connection error|Error code: (429|5\d\d)", re.I)
-RPM = 35
+RPM = float(os.environ.get("JR_RPM", 35))
+EMPTY_RETRIES = 3  # nemotron on NIM: empty reply = transport failure (deviation 2026-11-11a)
 
 
 def log(msg):
@@ -40,13 +41,27 @@ class Paced:
         self.chat = self
         self.completions = self
 
-    def create(self, **kw):
+    def _one(self, kw):
         with self._lock:
             wait = self._next - time.monotonic()
             self._next = max(self._next, time.monotonic()) + 60 / RPM
         if wait > 0:
             time.sleep(wait)
         return self._cli.chat.completions.create(**kw)
+
+    def create(self, **kw):
+        r = self._one(kw)
+        if not kw["model"].startswith("nvidia/nemotron"):
+            return r
+        for k in range(EMPTY_RETRIES):  # same request re-sent; every retry is logged
+            if (r.choices[0].message.content or "").strip():
+                break
+            with (ROOT / "logs" / "nemotron_empty_retries.log").open("a") as f:
+                f.write(f"{datetime.datetime.utcnow().isoformat()} empty reply, retry {k + 1}/{EMPTY_RETRIES}, "
+                        f"reasoning_tokens={getattr(r.usage.completion_tokens_details, 'reasoning_tokens', None)}\n")
+            time.sleep(10 * 2 ** k)
+            r = self._one(kw)
+        return r
 
 
 def load_items(limit=None):

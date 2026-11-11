@@ -173,4 +173,13 @@ All sensitivity paths go into one labelled multiverse figure.
 - **Free-tier providers can change models without notice.** IDs are pinned and logged, and any change is a deviation.
 
 ## Deviations
-(none yet)
+- **2026-11-11a (before any Arena verdict was analysed): Nemotron on NIM retries empty replies.**
+  - **What was observed.** In the 3-item smoke test, `nvidia/nemotron-3-ultra-550b-a55b` on NIM often stopped after 6-11 reasoning tokens with `finish=stop` and no content. On one item, 2 of 3 identical requests came back empty.
+  - **Why OpenRouter is not an option.** Its free tier is still capped at about 1,000 calls per day.
+  - **Decision** (Jet, under Nishchay's delegation):
+    - Nemotron stays on NIM, with 3 requests in flight and its own process paced to at most 8 requests per minute.
+    - Before the standard parse retries, an empty reply is re-sent up to 3 more times with backoff (10, 20 and 40 s). Every retry is logged to `logs/nemotron_empty_retries.log`.
+  - **Why this doesn't bias results.** An empty reply contains no verdict, so it is a transport failure, not a judgment. Re-sending the identical request cannot select for any particular verdict. Every item is retried by the same rule, regardless of content.
+  - **What happens if replies stay empty.** Replies still empty after retries count as failures under the existing eligibility rule (at most 5%). If Nemotron exceeds that cap, it is dropped as Gemma was, and recorded here. It is never restricted to the items that happened to succeed.
+  - **What was discarded.** The 3 smoke-test Nemotron entries were moved to `cache_arena_failed/smoke_nim/` and not used.
+  - **No change for DeepSeek and Mistral.** They started at 06:44 PT on 2026-11-11 under the frozen settings.
