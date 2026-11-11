@@ -12,7 +12,7 @@ from pathlib import Path
 from datasets import load_dataset
 
 ROOT = Path(__file__).resolve().parent.parent
-MIN_VOTES, PER_PAIR, MIN_PROMPT_TOK, MAX_RESP_TOK = 100, 40, 20, 4000
+MIN_VOTES, PER_PAIR, MIN_PROMPT_TOK, MAX_RESP_TOK = 100, 40, 5, 4000
 
 
 def ntok(s):
@@ -58,7 +58,7 @@ def main():
         counts["english_single_turn"] += 1
         if not p or not ra or not rb or ntok(p) < MIN_PROMPT_TOK:
             continue
-        counts["prompt_ge_20_tok"] += 1
+        counts["prompt_ge_5_tok"] += 1
         if max(ntok(ra), ntok(rb)) > MAX_RESP_TOK:
             continue
         counts["resp_le_4000_tok"] += 1
