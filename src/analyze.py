@@ -225,6 +225,7 @@ def main():
     ap.add_argument("--with-cli", action="store_true")
     ap.add_argument("--ties-as-tie", action="store_true", help="sensitivity: failures scored as ties")
     ap.add_argument("--out", default="pilot_metrics.json")
+    ap.add_argument("--exclude", default="", help="model families still pending, e.g. gptoss")
     args = ap.parse_args()
     cache = Path(args.cache)
     items = json.loads((ROOT / "data" / "pilot_items.json").read_text())
@@ -233,7 +234,7 @@ def main():
                       fail_rate=float(np.mean([x == "FAIL" for x in v if x is not None])) if any(x is not None for x in v) else None)
               for c, v in raw.items()}
     keep = [c for c, s in status.items() if s["coverage"] >= 0.9 and s["fail_rate"] <= MAX_FAIL
-            and (args.with_cli or c.split("-")[0] not in CLI)]
+            and (args.with_cli or c.split("-")[0] not in CLI) and c.split("-")[0] not in args.exclude.split(",")]
     if args.ties_as_tie:
         raw = {c: [("tie" if x == "FAIL" else x) for x in v] for c, v in raw.items()}
     V = {c: raw[c] for c in keep}

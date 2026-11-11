@@ -83,7 +83,7 @@ def client(backend):
         key, url = os.environ.get("OPENROUTER_API_KEY"), os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
     if not key:
         sys.exit(f"API key for {backend} not set")
-    return OpenAI(base_url=url, api_key=key, max_retries=0, timeout=180)
+    return OpenAI(base_url=url, api_key=key, max_retries=0, timeout=float(os.environ.get("JR_TIMEOUT", 180)))
 
 
 def call(cli, model, provider, sys_p, user_p, cache_path, nonce=""):

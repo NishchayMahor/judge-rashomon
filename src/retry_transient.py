@@ -24,6 +24,8 @@ def main():
             p = t[4]
             if p.exists() and TRANSIENT.search(str(json.loads(p.read_text()).get("error", ""))):
                 dst = ROOT / "cache_failed" / p.relative_to(ROOT / "cache")
+                if dst.exists():  # already retried once; never twice
+                    continue
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(p, dst)
                 todo.append(t)

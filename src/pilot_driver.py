@@ -28,20 +28,24 @@ def running(pattern):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cutoff", required=True)
+    ap.add_argument("--pending", default="", help="config family left running, e.g. gptoss (deviation 2026-11-10c)")
     args = ap.parse_args()
     cutoff = datetime.datetime.fromisoformat(args.cutoff)
-    while running("src/run_judges.py"):
+    def busy():
+        out = subprocess.run(["pgrep", "-fl", "src/run_judges.py|retry_transient"], capture_output=True, text=True).stdout
+        return any(args.pending == "" or f"configs {args.pending}" not in l for l in out.splitlines())
+    while busy():
         if datetime.datetime.now() >= cutoff and running("configs gptoss"):
             subprocess.run(["pkill", "-f", "configs gptoss"])
             log("cutoff reached: stopped gpt-oss (amendment)")
         time.sleep(60)
     log("rep0 done")
-    r = subprocess.run(["uv", "run", "python", "src/retry_transient.py"], cwd=ROOT, capture_output=True, text=True)
+    r = subprocess.run(["uv", "run", "python", "src/retry_transient.py"] + (["--configs", ",".join(c for c in CONFIGS if JUDGE_MODELS[c.split("-")[0]][0] != "cli" and not c.startswith(args.pending + "-"))] if args.pending else []), cwd=ROOT, capture_output=True, text=True)
     log("transient retry (deviation 2026-11-10b): " + r.stdout.strip().replace("\n", "; "))
     items = json.loads((ROOT / "data" / "pilot_items.json").read_text())
     ks = {}
     for c in CONFIGS:  # non-CLI, >=90% coverage, <=5% failures, kappa on its own complete cases (amendment A5/A6)
-        if JUDGE_MODELS[c.split("-")[0]][0] == "cli" or not (ROOT / "cache" / "rep0" / c).exists():
+        if JUDGE_MODELS[c.split("-")[0]][0] == "cli" or (args.pending and c.startswith(args.pending + "-")) or not (ROOT / "cache" / "rep0" / c).exists():
             continue
         v = load_verdicts(ROOT / "cache", c, 0, items)
         done = [x for x in v if x is not None]
@@ -59,7 +63,7 @@ def main():
     paths = (([], "pilot_metrics.json"), (["--with-cli"], "pilot_metrics_withcli.json"),
              (["--ties-as-tie"], "pilot_metrics_tiesastie.json"))
     for extra, out in paths:  # primary path first, then pre-declared sensitivity paths
-        subprocess.run(["uv", "run", "python", "src/analyze.py", "--noise", ",".join(noise), "--out", out, *extra],
+        subprocess.run(["uv", "run", "python", "src/analyze.py", "--noise", ",".join(noise), "--out", out, *extra, *(["--exclude", args.pending] if args.pending else [])],
                        cwd=ROOT, stdout=(ROOT / "logs" / f"{out}.log").open("w"), stderr=subprocess.STDOUT)
     log("analysis done")
 
