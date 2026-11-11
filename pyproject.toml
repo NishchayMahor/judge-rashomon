@@ -5,6 +5,7 @@ description = "Do LLM judges that agree with humans equally well agree on which 
 requires-python = ">=3.11"
 dependencies = [
     "datasets>=5.2.0",
+    "matplotlib>=3.11.2",
     "numpy>=2.4.6",
     "openai>=3.49.0",
     "python-dotenv>=1.2.4",

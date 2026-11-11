@@ -161,9 +161,12 @@ def analyze(items, pairs_meta, V, reps=None, B=2000, P=1000, seed=0, families=No
     sel_by = [D.by_pair[k][0] for k in ids]
     meas_by = [D.by_pair[k][1] for k in ids]
     main, S, R = one_pass(D, cfgs, V, sel_by, meas_by, ids, margins)
+    fl, mg = flip_units(D, cfgs, S, ids, R, margins)  # plot data only (figures.py)
+    main["units"] = {"flip": fl.tolist(), "margin": mg.tolist()}
     null, null_slope = perm_null(D, cfgs, V, R, meas_by, ids, margins, rng, P) if len(R) > 1 else (np.array([]), np.array([]))
     main["perm_null_mean"] = float(np.nanmean(null)) if len(null) else float("nan")
     main["perm_p"] = float(np.mean(null >= main["flip"])) if len(null) else float("nan")
+    main["perm_null_band"] = [float(x) for x in np.nanpercentile(null, [2.5, 97.5])] if len(null) else [float("nan")] * 2
     # H3 is against the null too: sampling alone makes flips fall with the human margin
     main["perm_null_slope_mean"] = float(np.nanmean(null_slope)) if len(null_slope) else float("nan")
     main["slope_perm_p"] = float(np.nanmean(null_slope <= main["slope"])) if len(null_slope) else float("nan")
