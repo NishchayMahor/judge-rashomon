@@ -36,6 +36,8 @@ def main():
             log("cutoff reached: stopped gpt-oss (amendment)")
         time.sleep(60)
     log("rep0 done")
+    r = subprocess.run(["uv", "run", "python", "src/retry_transient.py"], cwd=ROOT, capture_output=True, text=True)
+    log("transient retry (deviation 2026-11-10b): " + r.stdout.strip().replace("\n", "; "))
     items = json.loads((ROOT / "data" / "pilot_items.json").read_text())
     ks = {}
     for c in CONFIGS:  # non-CLI, >=90% coverage, <=5% failures, kappa on its own complete cases (amendment A5/A6)
@@ -46,6 +48,7 @@ def main():
         if len(done) < 0.9 * len(items) or sum(x == "FAIL" for x in done) > 0.05 * len(done):
             continue
         ks[c] = kappa(items, v, [i for i, x in enumerate(v) if x not in (None, "FAIL")])
+    noise = [max((c for c in ks if c.endswith(f)), key=ks.get) for f in ("-pair", "-point")]
     log(f"noise configs {noise} kappas {[round(ks[c], 3) for c in noise]}")
     for rep in (1, 2):
         procs = [subprocess.Popen(["uv", "run", "python", "src/run_judges.py", "--configs", c, "--rep", str(rep),
