@@ -206,3 +206,11 @@ All sensitivity paths go into one labelled multiverse figure.
     - If it is chosen as the best pairwise config for the noise floor and the re-runs would push spending past $2, the noise floor uses the next-best pairwise config instead. This rule is fixed now, before any kappa is computed.
     - Transient batch failures get the same one retry.
   - **If the account runs out of credit,** the affected requests are recorded as failures and the eligibility rule decides. A Codex-subscription fallback would be a further, separate deviation.
+- **2026-11-11c (during rep 0; no verdict analysed): rate-limit storm, concurrency lowered.**
+  - **What happened.** With DeepSeek at 24 workers and Mistral at 16, NIM returned HTTP 429 even after 6 backoff attempts. In the first ~2 hours, 185 of the 444 DeepSeek and Mistral requests ended as cached transient errors: 151 were 429s, and the rest were 502/503/504 or connection errors.
+  - **Cause.** Our own concurrency, not the items.
+  - **Fix.**
+    - The process was stopped and restarted with DeepSeek at 8 workers, Mistral at 6, and paced to at most 20 requests per minute.
+    - The 185 transient-error entries were moved to `cache_arena_failed/rep0/` and re-queued.
+  - **This uses up their one retry.** The post-rep-0 retry pass skips any entry already in `cache_arena_failed/`, so each of these 185 entries is retried exactly once, as for every other item.
+  - **Why this doesn't bias results.** The errors carry no verdict, so re-sending them does not depend on content.
