@@ -223,3 +223,10 @@ All sensitivity paths go into one labelled multiverse figure.
     - 4 cached 429 entries from rep 0 were deleted, so those requests run again.
     - 151 entries that 2026-11-11c had moved to `cache_arena_failed/` as 429s were removed from there, so they no longer count as used retries.
     - Only real served failures (5xx, timeouts, connection errors) keep counting toward the one-retry rule and the 5% failure cap.
+- **2026-11-11e (no verdict analysed): gpt-4o-mini pointwise added (`gpt-point`).**
+  - **Why.** NIM throughput fell to about 0.7 calls per minute, which would put DeepSeek and Mistral at about 19 days. Nishchay approved adding the pointwise format for gpt-4o-mini.
+  - **Config.**
+    - Same pointwise prompts and parsing as every other config.
+    - Temperature 0 and max_tokens 600, through the Batch API: 6,400 requests.
+  - **Why max_tokens 600.** It keeps the worst case at $1.44, under the $2 total cap with $0.50 already spent. On gpt-pair, reply lengths had a p99 of 394 tokens and a maximum of 517.
+  - **Rules.** Same family rule, eligibility rule and noise-floor budget rule as gpt-pair.

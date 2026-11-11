@@ -3,9 +3,9 @@
 Same prompts and parsing as every other pairwise config; temperature 0, max_tokens 1024 (bounds worst-case cost).
 Results land in cache_arena/rep{rep}/gpt-pair[-rev]/{id}.json in the same format run_judges.call() writes.
 Hard budget: the script refuses to submit if spent + this batch's worst case would exceed BUDGET_USD.
-Usage: uv run python src/arena_openai_batch.py submit [--rep 0] [--items measure] | collect <batch_id>
+Usage: uv run python src/arena_openai_batch.py submit [--fmt pair|point] [--rep 0] [--items measure] | collect <batch_id>
 """
-import argparse, datetime, json, os, sys
+import argparse, datetime, hashlib, json, os, sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -16,7 +16,8 @@ from arena_run import CACHE, load_items
 
 ROOT = rj.ROOT
 load_dotenv(ROOT / ".env")
-MODEL, MAX_TOK = "gpt-4o-mini-2024-07-18", 1024
+MODEL = "gpt-4o-mini-2024-07-18"
+MAX_TOK = {"pair": 1024, "point": 600}  # point: 600 keeps the worst case under the $2 cap (pair replies: p99 394, max 517)
 PRICE_IN, PRICE_OUT = 0.075e-6, 0.30e-6  # batch tier, USD per token (checked 2026-11-11)
 BUDGET_USD = 2.0
 SPEND = ROOT / "logs" / "openai_spend.json"
@@ -26,8 +27,20 @@ def spent():
     return json.loads(SPEND.read_text())["usd"] if SPEND.exists() else 0.0
 
 
-def requests(items, rep):
+def requests(items, rep, fmt):
     nonce = "" if rep == 0 else f"\n(run {rep})"
+    if fmt == "point":  # same paths and prompts as arena_run.tasks()
+        for it in items:
+            for side in ("first", "second"):
+                ans = it[f"ans_{side}"]
+                h = hashlib.sha1((it["prompt"] + ans).encode()).hexdigest()[:12]
+                path = CACHE / f"rep{rep}" / "gpt-point" / f"{it['id']}_{h}.json"
+                if not path.exists():
+                    yield str(path.relative_to(CACHE)), {
+                        "model": MODEL, "temperature": 0, "max_tokens": MAX_TOK["point"],
+                        "messages": [{"role": "system", "content": rj.POINT_SYS + nonce},
+                                     {"role": "user", "content": rj.POINT_USER.format(q=it["prompt"], a=ans)}]}
+        return
     for it in items:
         for rev in ((False, True) if it["both_orders"] and rep == 0 else (False,)):
             swap = it["swap"] ^ rev
@@ -36,22 +49,22 @@ def requests(items, rep):
             if path.exists():
                 continue
             yield str(path.relative_to(CACHE)), {
-                "model": MODEL, "temperature": 0, "max_tokens": MAX_TOK,
+                "model": MODEL, "temperature": 0, "max_tokens": MAX_TOK["pair"],
                 "messages": [{"role": "system", "content": rj.PAIR_SYS + nonce},
                              {"role": "user", "content": rj.PAIR_USER.format(q=it["prompt"], a=a, b=b)}]}
 
 
-def submit(rep, half):
+def submit(rep, half, fmt):
     import tiktoken
     enc = tiktoken.get_encoding("o200k_base")
     items = [it for it in load_items() if half == "all" or it["half"] == half]
-    reqs = list(requests(items, rep))
+    reqs = list(requests(items, rep, fmt))
     tin = sum(len(enc.encode(m["content"])) + 4 for _, b in reqs for m in b["messages"])
-    worst = tin * PRICE_IN + len(reqs) * MAX_TOK * PRICE_OUT
+    worst = tin * PRICE_IN + sum(b["max_tokens"] for _, b in reqs) * PRICE_OUT
     print(f"{len(reqs)} requests, {tin} input tokens, worst case ${worst:.2f}, spent so far ${spent():.2f}")
     if spent() + worst > BUDGET_USD:
         sys.exit(f"refusing: spent ${spent():.2f} + worst case ${worst:.2f} > budget ${BUDGET_USD}")
-    f = ROOT / "logs" / f"openai_batch_rep{rep}.jsonl"
+    f = ROOT / "logs" / f"openai_batch_{fmt}_rep{rep}.jsonl"
     f.write_text("".join(json.dumps({"custom_id": cid, "method": "POST", "url": "/v1/chat/completions", "body": b}) + "\n"
                          for cid, b in reqs))
     c = OpenAI()
@@ -96,5 +109,6 @@ if __name__ == "__main__":
     ap.add_argument("batch_id", nargs="?")
     ap.add_argument("--rep", type=int, default=0)
     ap.add_argument("--items", default="all", choices=["all", "select", "measure"])
+    ap.add_argument("--fmt", default="pair", choices=["pair", "point"])
     a = ap.parse_args()
-    submit(a.rep, a.items) if a.cmd == "submit" else collect(a.batch_id)
+    submit(a.rep, a.items, a.fmt) if a.cmd == "submit" else collect(a.batch_id)
