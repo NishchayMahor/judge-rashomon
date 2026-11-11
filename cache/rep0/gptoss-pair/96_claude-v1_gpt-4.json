@@ -1,1 +1,1 @@
-{"model": "openai/gpt-oss-20b", "date": "2026-11-10T20:49:43.384942", "text": "", "error": "Request timed out."}
+{"model": "openai/gpt-oss-20b", "returned_model": "openai/gpt-oss-20b", "provider": "nim", "date": "2026-11-11T06:49:42.146458", "text": "[[B]]", "nonce": "", "finish": "stop"}
