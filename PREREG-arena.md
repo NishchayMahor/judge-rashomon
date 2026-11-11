@@ -214,3 +214,12 @@ All sensitivity paths go into one labelled multiverse figure.
     - The 185 transient-error entries were moved to `cache_arena_failed/rep0/` and re-queued.
   - **This uses up their one retry.** The post-rep-0 retry pass skips any entry already in `cache_arena_failed/`, so each of these 185 entries is retried exactly once, as for every other item.
   - **Why this doesn't bias results.** The errors carry no verdict, so re-sending them does not depend on content.
+- **2026-11-11d (during rep 0; no verdict analysed): a 429 is not an attempt.**
+  - **What happened.** Even at 20 requests per minute, NIM kept returning HTTP 429.
+  - **What changed.**
+    - A 429 means the request was never served, so it is no longer counted as an attempt or cached as a failure.
+    - The pacer now re-sends the request and backs the whole process off: 30 s, doubling, up to 10 min.
+  - **Effect on cached entries.**
+    - 4 cached 429 entries from rep 0 were deleted, so those requests run again.
+    - 151 entries that 2026-11-11c had moved to `cache_arena_failed/` as 429s were removed from there, so they no longer count as used retries.
+    - Only real served failures (5xx, timeouts, connection errors) keep counting toward the one-retry rule and the 5% failure cap.

@@ -6,11 +6,12 @@ Prompts, parsing and decoding come from run_judges.py, unchanged. Cache: cache_a
 NIM requests are paced to stay under the free-tier rate limit (shared across threads).
 Usage: uv run python src/arena_run.py [--phase all|rep0|retry|noise] [--limit N]
 """
-import argparse, datetime, hashlib, json, os, re, shutil, threading, time
+import argparse, datetime, hashlib, itertools, json, os, re, shutil, threading, time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import numpy as np
+import openai
 
 import run_judges as rj
 from arena_analyze import Data, eligible, kappa_from, per_pair_conf
@@ -42,12 +43,18 @@ class Paced:
         self.completions = self
 
     def _one(self, kw):
-        with self._lock:
-            wait = self._next - time.monotonic()
-            self._next = max(self._next, time.monotonic()) + 60 / RPM
-        if wait > 0:
-            time.sleep(wait)
-        return self._cli.chat.completions.create(**kw)
+        """A 429 means the request was never served, so it is not an attempt: wait and re-send (deviation 2026-11-11d)."""
+        for k in itertools.count():
+            with self._lock:
+                wait = self._next - time.monotonic()
+                self._next = max(self._next, time.monotonic()) + 60 / RPM
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                return self._cli.chat.completions.create(**kw)
+            except openai.RateLimitError:
+                with self._lock:  # back the whole process off, not just this thread
+                    self._next = max(self._next, time.monotonic() + min(30 * 2 ** k, 600))
 
     def create(self, **kw):
         r = self._one(kw)
