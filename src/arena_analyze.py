@@ -10,6 +10,7 @@ import numpy as np
 
 FAMILIES = {  # judge -> contestant name prefixes from the same family (self-preference rule)
     "deepseek": ("deepseek",), "mistral": ("mistral", "mixtral"), "gemma": ("gemma", "gemini"), "nemotron": ("nemotron",),
+    "gpt": ("gpt", "chatgpt"),
 }
 MAX_FAIL, MIN_COV = 0.05, 0.90
 

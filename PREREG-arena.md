@@ -193,3 +193,16 @@ All sensitivity paths go into one labelled multiverse figure.
 
     With retries, 14 of the first 15 items did get a verdict. But each one took about 5 requests, and at that rate the 40-requests-per-minute account limit cannot finish about 9.9k calls. The process was stopped. `nemotron_wait.sh` re-runs the documented sample every 2 h (`src/nim_health.py`). Once at least 5 of 6 come back non-empty, it resumes Nemotron rep 0 under the rules above. Responses already cached are kept, since the same rule applies to every item.
   - **Mistral concurrency raised.** Mistral's worker count went from 6 to 16 (throughput only; the cache meant nothing was re-judged).
+- **2026-11-11b (before any measurement-half verdict was looked at): gpt-4o-mini pairwise added as a judge.**
+  - **Why.** With Nemotron paused and Gemma excluded, only 4 configs remained.
+  - **Approval.** Nishchay approved a paid OpenAI judge with a $2 cap.
+  - **Config.** `gpt-pair` = `gpt-4o-mini-2024-07-18` through the OpenAI Batch API.
+    - Same pairwise prompts, parsing, balanced order coin and both-orders subset as every other config.
+    - Temperature 0, max_tokens 1024. The 1024 matches the pilot PREREG text and bounds the worst-case cost.
+  - **Pairwise only:** 3,520 requests, worst case $1.36 at batch prices ($0.075 per million input tokens, $0.30 per million output, checked 2026-11-11).
+  - **Family rule:** contestants named `gpt*` or `chatgpt*` are excluded for this judge.
+  - **Same rules as everyone else.**
+    - It enters the eligibility rule, the selection and the set like any other config.
+    - If it is chosen as the best pairwise config for the noise floor and the re-runs would push spending past $2, the noise floor uses the next-best pairwise config instead. This rule is fixed now, before any kappa is computed.
+    - Transient batch failures get the same one retry.
+  - **If the account runs out of credit,** the affected requests are recorded as failures and the eligibility rule decides. A Codex-subscription fallback would be a further, separate deviation.
