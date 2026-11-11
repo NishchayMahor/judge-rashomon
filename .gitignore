@@ -11,3 +11,4 @@ arena.sh
 cache_arena/
 cache_arena_failed/
 data/arena_items.json
+nemotron_wait.sh

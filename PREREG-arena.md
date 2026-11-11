@@ -183,3 +183,13 @@ All sensitivity paths go into one labelled multiverse figure.
   - **What happens if replies stay empty.** Replies still empty after retries count as failures under the existing eligibility rule (at most 5%). If Nemotron exceeds that cap, it is dropped as Gemma was, and recorded here. It is never restricted to the items that happened to succeed.
   - **What was discarded.** The 3 smoke-test Nemotron entries were moved to `cache_arena_failed/smoke_nim/` and not used.
   - **No change for DeepSeek and Mistral.** They started at 06:44 PT on 2026-11-11 under the frozen settings.
+  - **Same day: endpoint diagnosed as broken server-side, so Nemotron is paused.** NIM's Nemotron-3-Ultra stops generating after 0-50 tokens under every setting tried:
+    - the frozen settings
+    - `enable_thinking` set to false
+    - `force_nonempty_content`
+    - temperature 0.01 and 1.0
+    - streaming
+    - NVIDIA's own documented sample request, which came back empty 6 out of 6 times
+
+    With retries, 14 of the first 15 items did get a verdict. But each one took about 5 requests, and at that rate the 40-requests-per-minute account limit cannot finish about 9.9k calls. The process was stopped. `nemotron_wait.sh` re-runs the documented sample every 2 h (`src/nim_health.py`). Once at least 5 of 6 come back non-empty, it resumes Nemotron rep 0 under the rules above. Responses already cached are kept, since the same rule applies to every item.
+  - **Mistral concurrency raised.** Mistral's worker count went from 6 to 16 (throughput only; the cache meant nothing was re-judged).
