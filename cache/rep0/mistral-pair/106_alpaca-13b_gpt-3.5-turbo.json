@@ -1,1 +1,1 @@
-{"model": "mistralai/mistral-large-4-1t-a52b", "date": "2026-11-10T20:16:24.215747", "text": "", "error": "Request timed out."}
+{"model": "mistralai/mistral-large-4-1t-a52b", "returned_model": "mistralai/mistral-large-4-1t-a52b", "provider": "nim", "date": "2026-11-11T01:51:18.743788", "text": "", "nonce": "", "finish": "length"}

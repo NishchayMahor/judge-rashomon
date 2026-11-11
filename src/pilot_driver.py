@@ -32,7 +32,7 @@ def main():
     args = ap.parse_args()
     cutoff = datetime.datetime.fromisoformat(args.cutoff)
     def busy():
-        out = subprocess.run(["pgrep", "-fl", "src/run_judges.py|retry_transient"], capture_output=True, text=True).stdout
+        out = subprocess.run(["pgrep", "-fl", "python.*src/(run_judges|retry_transient).py"], capture_output=True, text=True).stdout
         return any(args.pending == "" or f"configs {args.pending}" not in l for l in out.splitlines())
     while busy():
         if datetime.datetime.now() >= cutoff and running("configs gptoss"):

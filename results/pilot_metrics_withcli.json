@@ -1,0 +1,300 @@
+{
+ "path": {
+  "with_cli": true,
+  "ties_as_tie": false,
+  "eps_primary": 0.05,
+  "max_fail": 0.05
+ },
+ "config_status": {
+  "deepseek-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.03
+  },
+  "deepseek-point": {
+   "coverage": 1.0,
+   "fail_rate": 0.05
+  },
+  "mistral-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.115
+  },
+  "mistral-point": {
+   "coverage": 1.0,
+   "fail_rate": 0.06
+  },
+  "gemma-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.005
+  },
+  "gemma-point": {
+   "coverage": 1.0,
+   "fail_rate": 0.0
+  },
+  "gptoss-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.175
+  },
+  "gptoss-point": {
+   "coverage": 0.355,
+   "fail_rate": 0.056338028169014086
+  },
+  "nemotron-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.035
+  },
+  "nemotron-point": {
+   "coverage": 1.0,
+   "fail_rate": 0.0
+  },
+  "haiku-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.0
+  },
+  "sonnet-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.0
+  }
+ },
+ "included": [
+  "deepseek-pair",
+  "deepseek-point",
+  "gemma-pair",
+  "gemma-point",
+  "nemotron-pair",
+  "nemotron-point",
+  "haiku-pair",
+  "sonnet-pair"
+ ],
+ "main": {
+  "n_items": 181,
+  "kappa": {
+   "deepseek-pair": 0.5012826603325415,
+   "deepseek-point": 0.46692534243373385,
+   "gemma-pair": 0.49140353383816726,
+   "gemma-point": 0.5249343832020996,
+   "nemotron-pair": 0.5382653061224489,
+   "nemotron-point": 0.5122200538983366,
+   "haiku-pair": 0.5281766908384284,
+   "sonnet-pair": 0.5113205759757484
+  },
+  "tie_rate": {
+   "deepseek-pair": 0.08839779005524862,
+   "deepseek-point": 0.20994475138121546,
+   "gemma-pair": 0.06629834254143646,
+   "gemma-point": 0.3149171270718232,
+   "nemotron-pair": 0.11602209944751381,
+   "nemotron-point": 0.24861878453038674,
+   "haiku-pair": 0.09944751381215469,
+   "sonnet-pair": 0.11049723756906077
+  },
+  "best": "nemotron-pair",
+  "R": [
+   "deepseek-pair",
+   "gemma-pair",
+   "gemma-point",
+   "nemotron-pair",
+   "nemotron-point",
+   "haiku-pair",
+   "sonnet-pair"
+  ],
+  "paired_kappa_se": {
+   "deepseek-pair": 0.04311515186587362,
+   "deepseek-point": 0.05152171837044397,
+   "gemma-pair": 0.04754336426757161,
+   "gemma-point": 0.054623681781789495,
+   "nemotron-point": 0.05463686264573933,
+   "haiku-pair": 0.04247342176591885,
+   "sonnet-pair": 0.0492424730164157
+  },
+  "membership_freq": {
+   "deepseek-pair": 0.352,
+   "deepseek-point": 0.107,
+   "gemma-pair": 0.285,
+   "gemma-point": 0.634,
+   "nemotron-pair": 0.781,
+   "nemotron-point": 0.485,
+   "haiku-pair": 0.676,
+   "sonnet-pair": 0.485
+  },
+  "flip": 0.0,
+  "flip_se": 0.023499438515263475,
+  "confident_flip": 0.0,
+  "ambiguity": 0.39779005524861877,
+  "tau_mean": 1.0,
+  "perm_null_mean": 0.006370521541950115,
+  "perm_p": 1.0,
+  "flip_all_configs": 0.016666666666666666,
+  "confident_flip_all": 0.0,
+  "n_clear_pairs": 6,
+  "n_contested_pairs": 9,
+  "eps_curve": {
+   "0.0": {
+    "size": 1,
+    "flip": NaN,
+    "flip_clear": NaN,
+    "flip_contested": NaN
+   },
+   "0.01": {
+    "size": 1,
+    "flip": NaN,
+    "flip_clear": NaN,
+    "flip_contested": NaN
+   },
+   "0.02": {
+    "size": 3,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.03": {
+    "size": 5,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.04": {
+    "size": 6,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.05": {
+    "size": 7,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.06": {
+    "size": 7,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.07": {
+    "size": 7,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.08": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.09": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.1": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.11": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.12": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.13": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.14": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.15": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.16": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.17": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.18": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.19": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   },
+   "0.2": {
+    "size": 8,
+    "flip": 0.016666666666666666,
+    "flip_clear": 0.0,
+    "flip_contested": 0.02777777777777778
+   }
+  }
+ },
+ "split_half": [
+  {
+   "select_best": "gemma-point",
+   "R": [
+    "deepseek-pair",
+    "gemma-point",
+    "nemotron-point",
+    "haiku-pair"
+   ],
+   "flip_measured": 0.03571428571428571,
+   "flip_all": 0.06547619047619048,
+   "best_kappa_select": 0.5469487388120422,
+   "best_kappa_measure": 0.49318568994889267
+  },
+  {
+   "select_best": "nemotron-pair",
+   "R": [
+    "nemotron-pair"
+   ],
+   "flip_measured": NaN,
+   "flip_all": 0.016666666666666666,
+   "best_kappa_select": 0.6628470691934772,
+   "best_kappa_measure": 0.43427729579309216
+  }
+ ],
+ "human_ceiling": {
+  "n_items_multi": 485,
+  "pairwise_agreement": 0.6413678065054211
+ },
+ "noise": {
+  "nemotron-pair": {
+   "flip": 0.0,
+   "verdict_change": 0.09375,
+   "n_items": 192
+  },
+  "nemotron-point": {
+   "flip": 0.0,
+   "verdict_change": 0.19,
+   "n_items": 200
+  }
+ }
+}

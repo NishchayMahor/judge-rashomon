@@ -6,3 +6,4 @@ __pycache__/
 logs/
 scratch_arena/
 cache_failed/
+overnight.sh

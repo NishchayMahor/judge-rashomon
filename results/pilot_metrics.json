@@ -1,0 +1,291 @@
+{
+ "path": {
+  "with_cli": false,
+  "ties_as_tie": false,
+  "eps_primary": 0.05,
+  "max_fail": 0.05
+ },
+ "config_status": {
+  "deepseek-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.03
+  },
+  "deepseek-point": {
+   "coverage": 1.0,
+   "fail_rate": 0.05
+  },
+  "mistral-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.115
+  },
+  "mistral-point": {
+   "coverage": 1.0,
+   "fail_rate": 0.06
+  },
+  "gemma-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.005
+  },
+  "gemma-point": {
+   "coverage": 1.0,
+   "fail_rate": 0.0
+  },
+  "gptoss-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.175
+  },
+  "gptoss-point": {
+   "coverage": 0.355,
+   "fail_rate": 0.056338028169014086
+  },
+  "nemotron-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.035
+  },
+  "nemotron-point": {
+   "coverage": 1.0,
+   "fail_rate": 0.0
+  },
+  "haiku-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.0
+  },
+  "sonnet-pair": {
+   "coverage": 1.0,
+   "fail_rate": 0.0
+  }
+ },
+ "included": [
+  "deepseek-pair",
+  "deepseek-point",
+  "gemma-pair",
+  "gemma-point",
+  "nemotron-pair",
+  "nemotron-point"
+ ],
+ "main": {
+  "n_items": 181,
+  "kappa": {
+   "deepseek-pair": 0.5012826603325415,
+   "deepseek-point": 0.46692534243373385,
+   "gemma-pair": 0.49140353383816726,
+   "gemma-point": 0.5249343832020996,
+   "nemotron-pair": 0.5382653061224489,
+   "nemotron-point": 0.5122200538983366
+  },
+  "tie_rate": {
+   "deepseek-pair": 0.08839779005524862,
+   "deepseek-point": 0.20994475138121546,
+   "gemma-pair": 0.06629834254143646,
+   "gemma-point": 0.3149171270718232,
+   "nemotron-pair": 0.11602209944751381,
+   "nemotron-point": 0.24861878453038674
+  },
+  "best": "nemotron-pair",
+  "R": [
+   "deepseek-pair",
+   "gemma-pair",
+   "gemma-point",
+   "nemotron-pair",
+   "nemotron-point"
+  ],
+  "paired_kappa_se": {
+   "deepseek-pair": 0.04311515186587362,
+   "deepseek-point": 0.05152171837044397,
+   "gemma-pair": 0.04754336426757161,
+   "gemma-point": 0.054623681781789495,
+   "nemotron-point": 0.05463686264573933
+  },
+  "membership_freq": {
+   "deepseek-pair": 0.412,
+   "deepseek-point": 0.137,
+   "gemma-pair": 0.343,
+   "gemma-point": 0.686,
+   "nemotron-pair": 0.829,
+   "nemotron-point": 0.543
+  },
+  "flip": 0.0,
+  "flip_se": 0.026324056641214833,
+  "confident_flip": 0.0,
+  "ambiguity": 0.3756906077348066,
+  "tau_mean": 1.0,
+  "perm_null_mean": 0.0036809523809523807,
+  "perm_p": 1.0,
+  "flip_all_configs": 0.02222222222222222,
+  "confident_flip_all": 0.0,
+  "n_clear_pairs": 6,
+  "n_contested_pairs": 9,
+  "eps_curve": {
+   "0.0": {
+    "size": 1,
+    "flip": NaN,
+    "flip_clear": NaN,
+    "flip_contested": NaN
+   },
+   "0.01": {
+    "size": 1,
+    "flip": NaN,
+    "flip_clear": NaN,
+    "flip_contested": NaN
+   },
+   "0.02": {
+    "size": 2,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.03": {
+    "size": 3,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.04": {
+    "size": 4,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.05": {
+    "size": 5,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.06": {
+    "size": 5,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.07": {
+    "size": 5,
+    "flip": 0.0,
+    "flip_clear": 0.0,
+    "flip_contested": 0.0
+   },
+   "0.08": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.09": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.1": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.11": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.12": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.13": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.14": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.15": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.16": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.17": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.18": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.19": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   },
+   "0.2": {
+    "size": 6,
+    "flip": 0.02222222222222222,
+    "flip_clear": 0.0,
+    "flip_contested": 0.03703703703703704
+   }
+  }
+ },
+ "split_half": [
+  {
+   "select_best": "nemotron-pair",
+   "R": [
+    "gemma-point",
+    "nemotron-pair",
+    "nemotron-point"
+   ],
+   "flip_measured": 0.0,
+   "flip_all": 0.04444444444444444,
+   "best_kappa_select": 0.5169578622816033,
+   "best_kappa_measure": 0.5635451505016722
+  },
+  {
+   "select_best": "gemma-pair",
+   "R": [
+    "deepseek-pair",
+    "gemma-pair",
+    "gemma-point",
+    "nemotron-pair",
+    "nemotron-point"
+   ],
+   "flip_measured": 0.0,
+   "flip_all": 0.0,
+   "best_kappa_select": 0.5781151170145478,
+   "best_kappa_measure": 0.41675284384694933
+  }
+ ],
+ "human_ceiling": {
+  "n_items_multi": 485,
+  "pairwise_agreement": 0.6413678065054211
+ },
+ "noise": {
+  "nemotron-pair": {
+   "flip": 0.0,
+   "verdict_change": 0.09375,
+   "n_items": 192
+  },
+  "nemotron-point": {
+   "flip": 0.0,
+   "verdict_change": 0.19,
+   "n_items": 200
+  }
+ }
+}
