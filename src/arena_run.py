@@ -22,8 +22,8 @@ STATUS = ROOT / "logs" / "arena_status"
 JUDGES = {"deepseek": "deepseek-ai/deepseek-v4.1-flash", "mistral": "mistralai/mistral-large-4-1t-a52b",
           "nemotron": "nvidia/nemotron-3-ultra-550b-a55b"}  # all on NIM (PREREG-arena pre-freeze change 3)
 CONFIGS = [f"{j}-{f}" for j in JUDGES for f in ("pair", "point")]
-WORKERS = {"deepseek": 8, "mistral": 6, "nemotron": 3}  # nemotron low (deviation 2026-11-11a)  # deepseek is slow (~230 s/call), so more in flight
-TRANSIENT = re.compile(r"timed out|Connection error|Error code: (429|5\d\d)", re.I)
+WORKERS = {"deepseek": 20, "mistral": 14, "nemotron": 3}  # nemotron low (deviation 2026-11-11a)  # deepseek is slow (~230 s/call), so more in flight
+TRANSIENT = re.compile(r"timed out|Connection error|Error code: (404|429|5\d\d)", re.I)
 RPM = float(os.environ.get("JR_RPM", 35))
 EMPTY_RETRIES = 3  # nemotron on NIM: empty reply = transport failure (deviation 2026-11-11a)
 

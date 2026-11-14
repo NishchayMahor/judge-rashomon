@@ -230,3 +230,22 @@ All sensitivity paths go into one labelled multiverse figure.
     - Temperature 0 and max_tokens 600, through the Batch API: 6,400 requests.
   - **Why max_tokens 600.** It keeps the worst case at $1.44, under the $2 total cap with $0.50 already spent. On gpt-pair, reply lengths had a p99 of 394 tokens and a maximum of 517.
   - **Rules.** Same family rule, eligibility rule and noise-floor budget rule as gpt-pair.
+- **2026-11-12f / 2026-11-13f (during rep 0; no verdict analysed): timeouts and workers.**
+  - **What happened.**
+    - 2026-11-12: all NIM runs stalled for about 3 hours, with DeepSeek calls hanging under a 600 s timeout. The runs were restarted with a 120 s timeout.
+    - The 120 s timeout was shorter than DeepSeek's typical reply time (about 230 s), so about 35% of DeepSeek calls timed out. There were 0 HTTP 429s over the same period, so the request rate was far from NIM's limit.
+  - **What changed (2026-11-13).**
+    - Timeout set to 400 s.
+    - Workers raised: DeepSeek 8 → 20, Mistral 6 → 14. Nemotron unchanged at 3.
+    - The process-wide 429 backoff from 2026-11-11d stays in place.
+  - **Why this doesn't bias results.** Timeouts carry no verdict and fall under the one-retry rule as before. Only throughput changes.
+- **2026-11-13g (no verdict analysed): HTTP 404 counted as transient.**
+  - **What happened.** NIM briefly answered "model not found" (404) for Mistral during otherwise normal operation, affecting about 50 entries so far.
+  - **What changed.** A 404 is treated like a 5xx: it carries no verdict, gets the one retry, and doesn't count toward the 5% failure cap unless the retry also fails.
+- **2026-11-13h (no verdict analysed): staged release.**
+  - **Why.** Free-tier NIM throughput puts complete DeepSeek and Mistral rep 0 several days out. Nishchay asked for a faster first release.
+  - **Release 1 (interim, labelled exploratory).**
+    - The pre-registered pipeline runs unchanged on the configs whose rep 0 is complete at the cutoff: gpt-pair, gpt-point, nemotron-pair and nemotron-point.
+    - Completion is driven by server latency, not by verdict content.
+    - Release 1 makes no confirmatory H2 or H3 claim.
+  - **Release 2 (confirmatory).** The full pre-registered analysis with all configs, once DeepSeek and Mistral finish. Release 1 numbers are not used to change anything in Release 2.
