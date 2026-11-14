@@ -1,0 +1,74 @@
+{
+ "best": "gpt-pair",
+ "R": [
+  "gpt-pair"
+ ],
+ "kappa": {
+  "gpt-pair": 0.29335075813638584,
+  "gpt-point": 0.15339357530854766
+ },
+ "gap_se": {
+  "gpt-pair": 0.0,
+  "gpt-point": 0.02180565750406367
+ },
+ "n_units": 0,
+ "flip": NaN,
+ "flip_all": 0.21621621621621623,
+ "slope": NaN,
+ "p_at_005": NaN,
+ "p_at_020": NaN,
+ "units": {
+  "flip": [],
+  "margin": []
+ },
+ "perm_null_mean": NaN,
+ "perm_p": NaN,
+ "perm_null_band": [
+  NaN,
+  NaN
+ ],
+ "perm_null_slope_mean": NaN,
+ "slope_perm_p": NaN,
+ "ci": {
+  "flip": [
+   NaN,
+   NaN
+  ],
+  "flip_all": [
+   0.07692307692307693,
+   0.3333333333333333
+  ],
+  "slope": [
+   NaN,
+   NaN
+  ],
+  "p_at_005": [
+   NaN,
+   NaN
+  ],
+  "p_at_020": [
+   NaN,
+   NaN
+  ]
+ },
+ "slope_upper_95_one_sided": NaN,
+ "contrast_all_minus_R": [
+  NaN,
+  NaN
+ ],
+ "membership_freq": {
+  "gpt-pair": 1.0,
+  "gpt-point": 0.0
+ },
+ "H1": false,
+ "H2": false,
+ "H3": false,
+ "eligible": [
+  "gpt-pair",
+  "gpt-point"
+ ],
+ "release1_configs": [
+  "gpt-pair",
+  "gpt-point"
+ ]
+}
