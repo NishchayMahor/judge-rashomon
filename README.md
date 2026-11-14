@@ -14,7 +14,7 @@ The usual way to validate a judge is to check its agreement with a few hundred h
 ```bash
 uv sync
 uv run judge-rashomon examples/planted.csv   # planted disagreement: detected
-uv run judge-rashomon examples/null.csv      # no disagreement: not flagged
+uv run judge-rashomon examples/null.csv      # null data: nothing flagged
 uv run pytest
 ```
 Figures from a report: `uv run python -m judge_rashomon.figures report.json figs/`.
