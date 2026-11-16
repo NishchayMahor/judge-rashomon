@@ -3,9 +3,11 @@
 Pools the open LMArena 55k/100k/140k releases, applies the filters in order, keeps model pairs with >= 100 non-tie
 votes, samples 40 non-tie battles per pair (seed 0), splits them 20/20 into selection/measurement halves, balances the
 presentation-order coin within each pair, and marks a seeded 10% both-orders subset.
-Usage: uv run python src/arena_items.py
+Usage: uv run python src/arena_items.py [--ten-word]
+  --ten-word: only write data/arena_pairs_10w.json, per-pair human margins from votes on prompts with >= 10 words
+  (pre-registered sensitivity rule); the item set is not touched.
 """
-import hashlib, json, random, re
+import hashlib, json, random, re, sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -74,6 +76,16 @@ def main():
         a, b = (ra, rb) if ma == pair[0] else (rb, ra)
         battles[pair].append({"source": src, "battle_id": bid, "prompt": p, "ans_first": a, "ans_second": b, "human": w})
     # no per-user field exists in any release, so the vote cap is not applied
+    if "--ten-word" in sys.argv:
+        eligible = json.loads((ROOT / "data" / "arena_pairs.json").read_text())["pairs"]
+        out = {}
+        for key in eligible:
+            nt = [b for b in battles[tuple(key.split("|"))] if b["human"] != "tie" and ntok(b["prompt"]) >= 10]
+            wins = sum(b["human"] == "first" for b in nt)
+            out[key] = {"n_nontie": len(nt), "p_first": wins / len(nt) if nt else float("nan"), "human_first_wins": wins}
+        (ROOT / "data" / "arena_pairs_10w.json").write_text(json.dumps({"pairs": out}, indent=1))
+        print(sum(v["n_nontie"] >= 60 for v in out.values()), "of", len(out), "pairs have >= 60 ten-word votes")
+        return
     pairs = {}
     for pair, bs in battles.items():
         nt = [b for b in bs if b["human"] != "tie"]

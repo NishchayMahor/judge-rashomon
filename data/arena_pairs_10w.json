@@ -1,0 +1,404 @@
+{
+ "pairs": {
+  "amazon.nova-pro-v1:0|gemini-2.5-flash": {
+   "n_nontie": 76,
+   "p_first": 0.18421052631578946,
+   "human_first_wins": 14
+  },
+  "chatgpt-4o-latest|llama-3.1-405b-instruct": {
+   "n_nontie": 92,
+   "p_first": 0.5760869565217391,
+   "human_first_wins": 53
+  },
+  "chatgpt-4o-latest|llama-3.1-70b-instruct": {
+   "n_nontie": 79,
+   "p_first": 0.5569620253164557,
+   "human_first_wins": 44
+  },
+  "chatgpt-4o-latest|llama-3.1-8b-instruct": {
+   "n_nontie": 93,
+   "p_first": 0.7526881720430108,
+   "human_first_wins": 70
+  },
+  "claude-1|claude-2.0": {
+   "n_nontie": 82,
+   "p_first": 0.6341463414634146,
+   "human_first_wins": 52
+  },
+  "claude-1|claude-2.1": {
+   "n_nontie": 278,
+   "p_first": 0.579136690647482,
+   "human_first_wins": 161
+  },
+  "claude-1|gpt-3.5-turbo-0613": {
+   "n_nontie": 140,
+   "p_first": 0.5142857142857142,
+   "human_first_wins": 72
+  },
+  "claude-1|gpt-4-0314": {
+   "n_nontie": 95,
+   "p_first": 0.4,
+   "human_first_wins": 38
+  },
+  "claude-1|gpt-4-0613": {
+   "n_nontie": 90,
+   "p_first": 0.3,
+   "human_first_wins": 27
+  },
+  "claude-2.0|gpt-4-0613": {
+   "n_nontie": 135,
+   "p_first": 0.4444444444444444,
+   "human_first_wins": 60
+  },
+  "claude-2.0|gpt-4-1106-preview": {
+   "n_nontie": 101,
+   "p_first": 0.19801980198019803,
+   "human_first_wins": 20
+  },
+  "claude-2.1|claude-instant-1": {
+   "n_nontie": 96,
+   "p_first": 0.5416666666666666,
+   "human_first_wins": 52
+  },
+  "claude-2.1|gpt-4-0314": {
+   "n_nontie": 194,
+   "p_first": 0.32989690721649484,
+   "human_first_wins": 64
+  },
+  "claude-2.1|gpt-4-0613": {
+   "n_nontie": 324,
+   "p_first": 0.3333333333333333,
+   "human_first_wins": 108
+  },
+  "claude-2.1|gpt-4-1106-preview": {
+   "n_nontie": 481,
+   "p_first": 0.2203742203742204,
+   "human_first_wins": 106
+  },
+  "claude-2.1|mixtral-8x7b-instruct-v0.1": {
+   "n_nontie": 99,
+   "p_first": 0.45454545454545453,
+   "human_first_wins": 45
+  },
+  "claude-3-5-sonnet-20240620|claude-3-opus-20240229": {
+   "n_nontie": 88,
+   "p_first": 0.6136363636363636,
+   "human_first_wins": 54
+  },
+  "claude-3-5-sonnet-20240620|gemini-1.5-flash-api-0514": {
+   "n_nontie": 100,
+   "p_first": 0.64,
+   "human_first_wins": 64
+  },
+  "claude-3-5-sonnet-20240620|gemini-1.5-pro-api-0514": {
+   "n_nontie": 376,
+   "p_first": 0.5132978723404256,
+   "human_first_wins": 193
+  },
+  "claude-3-5-sonnet-20240620|gemini-1.5-pro-exp-0801": {
+   "n_nontie": 77,
+   "p_first": 0.4155844155844156,
+   "human_first_wins": 32
+  },
+  "claude-3-5-sonnet-20240620|gemma-2-27b-it": {
+   "n_nontie": 113,
+   "p_first": 0.5132743362831859,
+   "human_first_wins": 58
+  },
+  "claude-3-5-sonnet-20240620|gemma-2-9b-it": {
+   "n_nontie": 101,
+   "p_first": 0.6732673267326733,
+   "human_first_wins": 68
+  },
+  "claude-3-5-sonnet-20240620|gpt-4o-2024-05-13": {
+   "n_nontie": 350,
+   "p_first": 0.44285714285714284,
+   "human_first_wins": 155
+  },
+  "claude-3-5-sonnet-20240620|llama-3-70b-instruct": {
+   "n_nontie": 118,
+   "p_first": 0.5423728813559322,
+   "human_first_wins": 64
+  },
+  "claude-3-5-sonnet-20241022|gemini-2.0-flash-001": {
+   "n_nontie": 95,
+   "p_first": 0.4842105263157895,
+   "human_first_wins": 46
+  },
+  "claude-3-7-sonnet-20250219-thinking-32k|gemini-2.5-flash": {
+   "n_nontie": 82,
+   "p_first": 0.2682926829268293,
+   "human_first_wins": 22
+  },
+  "claude-3-7-sonnet-20250219-thinking-32k|gemini-2.5-pro": {
+   "n_nontie": 70,
+   "p_first": 0.17142857142857143,
+   "human_first_wins": 12
+  },
+  "claude-instant-1|gpt-3.5-turbo-0613": {
+   "n_nontie": 119,
+   "p_first": 0.3949579831932773,
+   "human_first_wins": 47
+  },
+  "claude-instant-1|gpt-3.5-turbo-1106": {
+   "n_nontie": 177,
+   "p_first": 0.519774011299435,
+   "human_first_wins": 92
+  },
+  "claude-instant-1|vicuna-33b": {
+   "n_nontie": 119,
+   "p_first": 0.5126050420168067,
+   "human_first_wins": 61
+  },
+  "claude-opus-4-20250514|command-a-03-2025": {
+   "n_nontie": 83,
+   "p_first": 0.6024096385542169,
+   "human_first_wins": 50
+  },
+  "claude-opus-4-20250514|deepseek-v3-0324": {
+   "n_nontie": 83,
+   "p_first": 0.4819277108433735,
+   "human_first_wins": 40
+  },
+  "claude-opus-4-20250514|gemini-2.5-flash": {
+   "n_nontie": 99,
+   "p_first": 0.45454545454545453,
+   "human_first_wins": 45
+  },
+  "claude-opus-4-20250514|gemini-2.5-pro": {
+   "n_nontie": 87,
+   "p_first": 0.21839080459770116,
+   "human_first_wins": 19
+  },
+  "claude-opus-4-20250514|gemma-3-27b-it": {
+   "n_nontie": 76,
+   "p_first": 0.4868421052631579,
+   "human_first_wins": 37
+  },
+  "claude-opus-4-20250514|llama-4-maverick-03-26-experimental": {
+   "n_nontie": 76,
+   "p_first": 0.47368421052631576,
+   "human_first_wins": 36
+  },
+  "claude-opus-4-20250514|mistral-medium-2505": {
+   "n_nontie": 78,
+   "p_first": 0.3717948717948718,
+   "human_first_wins": 29
+  },
+  "claude-opus-4-20250514|qwen3-235b-a22b-no-thinking": {
+   "n_nontie": 89,
+   "p_first": 0.42696629213483145,
+   "human_first_wins": 38
+  },
+  "claude-sonnet-4-20250514|mistral-medium-2505": {
+   "n_nontie": 72,
+   "p_first": 0.3055555555555556,
+   "human_first_wins": 22
+  },
+  "gemini-1.5-pro-api-0514|gpt-4o-2024-05-13": {
+   "n_nontie": 104,
+   "p_first": 0.40384615384615385,
+   "human_first_wins": 42
+  },
+  "gemini-2.5-flash|mistral-medium-2505": {
+   "n_nontie": 79,
+   "p_first": 0.5316455696202531,
+   "human_first_wins": 42
+  },
+  "gemini-2.5-pro|mistral-medium-2505": {
+   "n_nontie": 88,
+   "p_first": 0.6818181818181818,
+   "human_first_wins": 60
+  },
+  "gemini-pro|gpt-4-1106-preview": {
+   "n_nontie": 108,
+   "p_first": 0.2222222222222222,
+   "human_first_wins": 24
+  },
+  "gemini-pro-dev-api|gpt-3.5-turbo-0613": {
+   "n_nontie": 107,
+   "p_first": 0.514018691588785,
+   "human_first_wins": 55
+  },
+  "gemini-pro-dev-api|gpt-4-0613": {
+   "n_nontie": 103,
+   "p_first": 0.3786407766990291,
+   "human_first_wins": 39
+  },
+  "gemini-pro-dev-api|gpt-4-1106-preview": {
+   "n_nontie": 130,
+   "p_first": 0.27692307692307694,
+   "human_first_wins": 36
+  },
+  "gemma-2-27b-it|gpt-4o-2024-05-13": {
+   "n_nontie": 96,
+   "p_first": 0.3541666666666667,
+   "human_first_wins": 34
+  },
+  "gemma-2-27b-it|llama-3-70b-instruct": {
+   "n_nontie": 87,
+   "p_first": 0.40229885057471265,
+   "human_first_wins": 35
+  },
+  "gemma-2-9b-it|gpt-4o-2024-05-13": {
+   "n_nontie": 103,
+   "p_first": 0.3786407766990291,
+   "human_first_wins": 39
+  },
+  "gpt-3.5-turbo-0613|gpt-3.5-turbo-1106": {
+   "n_nontie": 75,
+   "p_first": 0.72,
+   "human_first_wins": 54
+  },
+  "gpt-3.5-turbo-0613|gpt-4-0314": {
+   "n_nontie": 91,
+   "p_first": 0.2967032967032967,
+   "human_first_wins": 27
+  },
+  "gpt-3.5-turbo-0613|gpt-4-0613": {
+   "n_nontie": 142,
+   "p_first": 0.44366197183098594,
+   "human_first_wins": 63
+  },
+  "gpt-3.5-turbo-0613|gpt-4-1106-preview": {
+   "n_nontie": 305,
+   "p_first": 0.16393442622950818,
+   "human_first_wins": 50
+  },
+  "gpt-3.5-turbo-0613|mistral-medium": {
+   "n_nontie": 170,
+   "p_first": 0.38823529411764707,
+   "human_first_wins": 66
+  },
+  "gpt-3.5-turbo-0613|mixtral-8x7b-instruct-v0.1": {
+   "n_nontie": 123,
+   "p_first": 0.3821138211382114,
+   "human_first_wins": 47
+  },
+  "gpt-3.5-turbo-0613|pplx-70b-online": {
+   "n_nontie": 69,
+   "p_first": 0.5362318840579711,
+   "human_first_wins": 37
+  },
+  "gpt-3.5-turbo-0613|vicuna-33b": {
+   "n_nontie": 160,
+   "p_first": 0.48125,
+   "human_first_wins": 77
+  },
+  "gpt-3.5-turbo-0613|wizardlm-70b": {
+   "n_nontie": 72,
+   "p_first": 0.5972222222222222,
+   "human_first_wins": 43
+  },
+  "gpt-3.5-turbo-1106|gpt-4-1106-preview": {
+   "n_nontie": 259,
+   "p_first": 0.15444015444015444,
+   "human_first_wins": 40
+  },
+  "gpt-3.5-turbo-1106|mistral-medium": {
+   "n_nontie": 131,
+   "p_first": 0.32061068702290074,
+   "human_first_wins": 42
+  },
+  "gpt-3.5-turbo-1106|mixtral-8x7b-instruct-v0.1": {
+   "n_nontie": 116,
+   "p_first": 0.43103448275862066,
+   "human_first_wins": 50
+  },
+  "gpt-4-0314|gpt-4-0613": {
+   "n_nontie": 194,
+   "p_first": 0.4690721649484536,
+   "human_first_wins": 91
+  },
+  "gpt-4-0314|gpt-4-1106-preview": {
+   "n_nontie": 142,
+   "p_first": 0.2746478873239437,
+   "human_first_wins": 39
+  },
+  "gpt-4-0613|gpt-4-1106-preview": {
+   "n_nontie": 393,
+   "p_first": 0.3486005089058524,
+   "human_first_wins": 137
+  },
+  "gpt-4-1106-preview|mistral-medium": {
+   "n_nontie": 185,
+   "p_first": 0.7405405405405405,
+   "human_first_wins": 137
+  },
+  "gpt-4-1106-preview|mixtral-8x7b-instruct-v0.1": {
+   "n_nontie": 157,
+   "p_first": 0.7834394904458599,
+   "human_first_wins": 123
+  },
+  "gpt-4o-2024-05-13|llama-3-70b-instruct": {
+   "n_nontie": 87,
+   "p_first": 0.5517241379310345,
+   "human_first_wins": 48
+  },
+  "koala-13b|vicuna-13b": {
+   "n_nontie": 74,
+   "p_first": 0.28378378378378377,
+   "human_first_wins": 21
+  },
+  "llama-2-13b-chat|mistral-7b-instruct": {
+   "n_nontie": 88,
+   "p_first": 0.6477272727272727,
+   "human_first_wins": 57
+  },
+  "llama-2-13b-chat|vicuna-13b": {
+   "n_nontie": 107,
+   "p_first": 0.4766355140186916,
+   "human_first_wins": 51
+  },
+  "llama-2-13b-chat|zephyr-7b-beta": {
+   "n_nontie": 89,
+   "p_first": 0.5056179775280899,
+   "human_first_wins": 45
+  },
+  "llama-2-70b-chat|mixtral-8x7b-instruct-v0.1": {
+   "n_nontie": 113,
+   "p_first": 0.4247787610619469,
+   "human_first_wins": 48
+  },
+  "llama-2-70b-chat|pplx-70b-online": {
+   "n_nontie": 65,
+   "p_first": 0.5076923076923077,
+   "human_first_wins": 33
+  },
+  "llama-2-70b-chat|vicuna-13b": {
+   "n_nontie": 74,
+   "p_first": 0.5540540540540541,
+   "human_first_wins": 41
+  },
+  "llama-2-70b-chat|vicuna-33b": {
+   "n_nontie": 161,
+   "p_first": 0.5093167701863354,
+   "human_first_wins": 82
+  },
+  "llama-2-7b-chat|mistral-7b-instruct": {
+   "n_nontie": 77,
+   "p_first": 0.5194805194805194,
+   "human_first_wins": 40
+  },
+  "llama-2-7b-chat|zephyr-7b-beta": {
+   "n_nontie": 64,
+   "p_first": 0.546875,
+   "human_first_wins": 35
+  },
+  "mistral-7b-instruct|zephyr-7b-beta": {
+   "n_nontie": 98,
+   "p_first": 0.3673469387755102,
+   "human_first_wins": 36
+  },
+  "mistral-medium|mixtral-8x7b-instruct-v0.1": {
+   "n_nontie": 129,
+   "p_first": 0.49612403100775193,
+   "human_first_wins": 64
+  },
+  "mistral-medium-2505|qwen3-235b-a22b-no-thinking": {
+   "n_nontie": 82,
+   "p_first": 0.5121951219512195,
+   "human_first_wins": 42
+  }
+ }
+}
