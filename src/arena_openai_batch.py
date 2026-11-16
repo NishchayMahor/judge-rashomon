@@ -54,13 +54,18 @@ def requests(items, rep, fmt):
                              {"role": "user", "content": rj.PAIR_USER.format(q=it["prompt"], a=a, b=b)}]}
 
 
-def submit(rep, half, fmt):
+def plan(rep, half, fmt):
+    """(requests not yet cached, input tokens, worst-case USD) for one batch."""
     import tiktoken
     enc = tiktoken.get_encoding("o200k_base")
     items = [it for it in load_items() if half == "all" or it["half"] == half]
     reqs = list(requests(items, rep, fmt))
     tin = sum(len(enc.encode(m["content"])) + 4 for _, b in reqs for m in b["messages"])
-    worst = tin * PRICE_IN + sum(b["max_tokens"] for _, b in reqs) * PRICE_OUT
+    return reqs, tin, tin * PRICE_IN + sum(b["max_tokens"] for _, b in reqs) * PRICE_OUT
+
+
+def submit(rep, half, fmt):
+    reqs, tin, worst = plan(rep, half, fmt)
     print(f"{len(reqs)} requests, {tin} input tokens, worst case ${worst:.2f}, spent so far ${spent():.2f}")
     if spent() + worst > BUDGET_USD:
         sys.exit(f"refusing: spent ${spent():.2f} + worst case ${worst:.2f} > budget ${BUDGET_USD}")
@@ -71,6 +76,7 @@ def submit(rep, half, fmt):
     up = c.files.create(file=f.open("rb"), purpose="batch")
     bt = c.batches.create(input_file_id=up.id, endpoint="/v1/chat/completions", completion_window="24h")
     print(f"BATCH {bt.id}")
+    return bt.id
 
 
 def collect(batch_id):
@@ -93,7 +99,7 @@ def collect(batch_id):
                 u = body["usage"]
                 usd += u["prompt_tokens"] * PRICE_IN + u["completion_tokens"] * PRICE_OUT
                 out = {"model": MODEL, "returned_model": body["model"], "provider": "openai-batch", "batch": batch_id,
-                       "date": now, "text": body["choices"][0]["message"]["content"] or "", "nonce": "",
+                       "date": now, "text": body["choices"][0]["message"]["content"] or "", "nonce": "" if r["custom_id"].startswith("rep0/") else f"\n(run {r['custom_id'][3]})",
                        "finish": body["choices"][0]["finish_reason"]}
             else:
                 out = {"model": MODEL, "date": now, "text": "", "batch": batch_id,

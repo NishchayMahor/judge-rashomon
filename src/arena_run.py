@@ -4,7 +4,7 @@
   noise  best pairwise + best pointwise config (selection-half kappa, eligible configs) re-run twice on the measurement half
 Prompts, parsing and decoding come from run_judges.py, unchanged. Cache: cache_arena/rep{r}/{cfg}/.
 NIM requests are paced to stay under the free-tier rate limit (shared across threads).
-Usage: uv run python src/arena_run.py [--phase all|rep0|retry|noise] [--limit N]
+Usage: uv run python src/arena_run.py [--phase all|rep0|retry|noise] [--limit N] [--dry]
 """
 import argparse, datetime, hashlib, itertools, json, os, re, shutil, threading, time
 from concurrent.futures import ThreadPoolExecutor
@@ -159,21 +159,45 @@ def phase_retry(items):
     log("RETRY_DONE")
 
 
+def gpt_fits(cfg):
+    """Noise-floor budget rule (deviation 2026-11-11b): a gpt config is re-run only if both re-runs' worst case fits."""
+    import arena_openai_batch as ob
+    worst = sum(ob.plan(rep, "measure", cfg.split("-")[1])[2] for rep in (1, 2))
+    log(f"{cfg}: re-run worst case ${worst:.2f}, spent ${ob.spent():.2f}, cap ${ob.BUDGET_USD}")
+    return ob.spent() + worst <= ob.BUDGET_USD
+
+
 def phase_noise(items):
     meta = json.loads((ROOT / "data" / "arena_pairs.json").read_text())["pairs"]
     D = Data(items, meta)
-    V = {c: verdicts(c, items, 0) for c in CONFIGS}
+    JUDGES.setdefault("gpt", "gpt-4o-mini-2024-07-18")  # gpt verdicts come from arena_openai_batch, same cache layout
+    pool = CONFIGS + [c for c in ("gpt-pair", "gpt-point") if c not in CONFIGS]
+    V = {c: verdicts(c, items, 0) for c in pool}
     ok = eligible(V)
-    for c in CONFIGS:
+    for c in pool:
         v = V[c]; ran = v != -1
         log(f"{c}: coverage {ran.mean():.3f}, failures {(v[ran] == -2).mean():.3f}, eligible {c in ok}")
     sel_by = [D.by_pair[k][0] for k in range(len(D.pairs))]
     k = dict(zip(ok, kappa_from(per_pair_conf(D, ok, V, sel_by).sum(1)))) if ok else {}
-    noise = [max((c for c in k if c.endswith(f)), key=k.get) for f in ("-pair", "-point") if any(c.endswith(f) for c in k)]
-    log(f"NOISE_CONFIGS {noise}")  # selection-half kappas are not logged: they feed only this choice
+    noise = []
+    for f in ("-pair", "-point"):  # best per format; a gpt config over budget gives way to the next best
+        for c in sorted((c for c in k if c.endswith(f)), key=k.get, reverse=True):
+            if not c.startswith("gpt") or gpt_fits(c):
+                noise.append(c)
+                break
+            log(f"{c}: over budget, next-best {f[1:]} config used")
+    log(f"NOISE_CONFIGS{' (dry run, nothing submitted)' if NOISE_DRY else ''} {noise}")  # selection-half kappas are not logged: they feed only this choice
     meas = [it for it in items if it["half"] == "measure"]
+    if NOISE_DRY:
+        return
+    for c in [c for c in noise if c.startswith("gpt")]:  # async: collect with arena_openai_batch.py collect <id>
+        import arena_openai_batch as ob
+        for rep in (1, 2):
+            log(f"GPT_BATCH {c} rep{rep} {ob.submit(rep, 'measure', c.split('-')[1])}")
+    nim = [c for c in noise if not c.startswith("gpt")]
     for rep in (1, 2):
-        run_parallel({c: list(tasks(c, meas, rep)) for c in noise})
+        if nim:
+            run_parallel({c: list(tasks(c, meas, rep)) for c in nim})
         log(f"REP{rep}_DONE")
     log("DONE")
 
@@ -184,8 +208,10 @@ def main():
     ap.add_argument("--phase", default="all")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--judges", default=",".join(JUDGES), help="subset of judges (rep0/retry only)")
+    ap.add_argument("--dry", action="store_true", help="noise phase: pick and log the configs, run nothing")
     a = ap.parse_args()
-    global CONFIGS
+    global CONFIGS, NOISE_DRY
+    NOISE_DRY = a.dry
     CONFIGS = [c for c in CONFIGS if c.split("-")[0] in a.judges.split(",")]
     STATUS.parent.mkdir(exist_ok=True)
     PACED = Paced(rj.client("nim"))
