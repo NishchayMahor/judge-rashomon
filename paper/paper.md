@@ -3,7 +3,7 @@
 *Draft, 2026-11-16. Arena sections filled from `RESULTS-arena.md` (final analysis under deviation 2026-11-16i).*
 
 ## Abstract
-LLM-as-a-judge evaluations are usually validated by checking that the judge agrees with human labels, and the judge's rankings are then trusted. We ask whether that validation is enough. Among judge configurations that agree with humans equally well (an epsilon-Rashomon set, defined with a standard error), how often do two of them disagree about which of two systems is better? Does that happen more than chance and re-run noise would produce? On 3,200 LMArena battles, the set held a single config (pairwise Nemotron), so within-set flips could not be tested. Configs that a looser agreement threshold would accept disagree on about 22% of system-pair conclusions (95% CI 15–30%), across every sensitivity path. Closeness (H3) could not be tested. We release `judge-rashomon`, a tool that runs this check on any judge setup.
+LLM-as-a-judge evaluations are usually validated by checking that the judge agrees with human labels, and the judge's rankings are then trusted. We ask whether that validation is enough. Among judge configurations that agree with humans equally well (an epsilon-Rashomon set, defined with a standard error), how often do two of them disagree about which of two systems is better? Does that happen more than chance and re-run noise would produce? On 3,200 LMArena battles, the set held a single config (pairwise Nemotron), so within-set flips could not be tested. Configs that a looser agreement threshold would accept disagree on about 20–22% of system-pair conclusions (primary 22.0%, CI 15–30%) on every sensitivity path; this was not compared to a re-run noise floor, which was not run. Closeness (H3) could not be tested. We release `judge-rashomon`, a tool that runs this check on any judge setup.
 
 ## 1. Introduction
 - **Practice.** Validate a judge against a few hundred human labels (kappa, accuracy or correlation), then use it to rank systems and pick winners. Examples: Arena-Hard, AlpacaEval, and many internal leaderboards.
@@ -73,7 +73,7 @@ See `paper/related_work.md`; it will be condensed here.
   - **Filters:** English, single-turn, prompt of at least 5 words, responses of at most 4,000 words, de-duplicated.
   - **Pairs:** 80 system pairs with at least 100 decisive votes.
   - **Battles:** 40 per pair, split 20/20, giving 3,200 items. A 320-item subset is judged in both orders.
-- **Judges.** gpt-4o-mini (Batch API), and Nemotron-3-Ultra, DeepSeek-v4.1-flash and Mistral-large-4 (NIM), each pairwise and pointwise. Four configs were eligible: both gpt and both Nemotron formats. Mistral and DeepSeek failed the failure cap or coverage rule because the NIM runs were parked before retries (deviation i).
+- **Judges.** gpt-4o-mini (Batch API), and Nemotron-3-Ultra, DeepSeek-v4.1-flash and Mistral-large-4 (NIM), each pairwise and pointwise. Four configs were eligible: both gpt and both Nemotron formats. Mistral and DeepSeek failed the failure cap or coverage rule Most failures were transient and their retry was parked (deviation i), so some might have qualified.
 - **Deviations.** All are listed in PREREG-arena (a–i). None were made after looking at a measurement-half verdict. The last one parked the NIM runs, so there is no Arena noise floor.
 - **5.1 Set and agreement** (fig: kappa.png). Kappa: nemotron-pair 0.354, gpt-pair 0.295, nemotron-point 0.195, gpt-point 0.156. gpt-pair trails by 2.2 gap SEs, so R = {nemotron-pair}; H1 is not supported. gpt-pair joins R in 26.5% of bootstrap draws.
 - **5.2 Flips vs chance and noise (H2).** Not testable with |R| = 1. In bootstrap draws where R has two members, the within-set flip rate is 8–34% (descriptive only).
@@ -89,7 +89,7 @@ See `paper/related_work.md`; it will be condensed here.
 - **Provider drift.** Free-tier serving changes over time, so model IDs and providers are logged on every call.
 
 ## 7. Conclusion
-On Arena, a 1-SE agreement rule was strict enough to leave one judge standing, so the pre-registered multiplicity question has no confirmatory answer here. Judges that a looser rule would accept disagree on about a fifth of system-level conclusions. Whether this exceeds re-run noise is untested, because the noise floor was parked. The practical reading: the threshold for "validated" decides how much ranking instability a team inherits.
+On Arena, a 1-SE agreement rule was strict enough to leave one judge standing, so the pre-registered multiplicity question has no confirmatory answer here. Judges that a looser rule would accept disagree on about a fifth of system-level conclusions. Whether this exceeds re-run noise is untested, because the noise floor was parked. A looser threshold admits judges whose conclusions differ on about 20% of pairs; how much of that exceeds re-run noise is unknown.
 
 ## Artifacts
 - **Code and tool:** `judge_rashomon/` (CLI, figures, known-answer tests).

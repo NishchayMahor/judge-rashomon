@@ -65,8 +65,8 @@ Most Mistral and DeepSeek failures are NIM timeouts and server errors. Under the
 ## Reading
 
 1. **The 1-SE validation rule separated the judges.** On 3,200 Arena battles, only one config passed as "as good as the best". The pre-registered question, whether equally valid judges flip conclusions, therefore has no confirmatory answer here. The set it needs did not form.
-2. **Looser validation would leave conclusions unstable.** Configs that a looser rule would accept disagree on about a fifth of system-pair conclusions. That holds at fixed epsilons from 0.06 to 0.20 and across every sensitivity path. So what a judge says about which system is better depends heavily on which validated-looking judge you pick, unless the agreement check is tight enough to rule most of them out.
-3. **Format mattered more than model** for agreement with humans, in this judge pool.
+2. **Looser validation would leave conclusions unstable.** Configs that a looser rule would accept disagree on about a fifth of system-pair conclusions. That holds at fixed epsilons from 0.06 to 0.20 and across every sensitivity path. So what a judge says about which system is better depends substantially, pending a noise-floor comparison, on which validated-looking judge you pick, unless the agreement check is tight enough to rule most of them out.
+3. **In kappa, format separated configs more than model did** (2 models, 4 configs). H5 on flips was not run.
 
 ## What this does not show
 
