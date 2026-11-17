@@ -249,3 +249,15 @@ All sensitivity paths go into one labelled multiverse figure.
     - Completion is driven by server latency, not by verdict content.
     - Release 1 makes no confirmatory H2 or H3 claim.
   - **Release 2 (confirmatory).** The full pre-registered analysis with all configs, once DeepSeek and Mistral finish. Release 1 numbers are not used to change anything in Release 2.
+- **2026-11-16i (no measurement-half verdict analysed): final release without completing NIM runs.**
+  - **Why.** NIM throughput stayed far below plan: DeepSeek pointwise reached 4,635 of 6,400 items after 5 days, and the one-retry pass was queuing about 2,000 transient failures. Nishchay asked to park the remaining NIM work and finalize with what is complete. The decision rests on throughput alone.
+  - **What is parked.**
+    - DeepSeek pointwise rep 0 (72% coverage).
+    - The one-retry pass for Mistral and DeepSeek. 133 of about 2,000 queued calls had been retried when it stopped; the rest keep their transient failures, which count as failures.
+    - The noise-floor re-runs (none started).
+  - **How the configs are judged.** Unchanged eligibility rule (coverage ≥ 90%, failures ≤ 5%), as the budget section states for a config that loses its provider mid-run. Incomplete configs are left out.
+  - **Effect on hypotheses.**
+    - H2 is tested against the permutation null only. Its noise-floor condition is not tested, so H2 cannot be confirmed in full.
+    - H1, H3 and H4 run as pre-registered on the eligible configs.
+  - **What was seen before this decision.** Coverage and failure counts, Release 1's gpt-only numbers, and the dry-run noise pick (config names, chosen by selection-half kappa). No measurement-half verdict of any NIM config.
+  - **This replaces Release 2 from 2026-11-13h** as the final Arena analysis.

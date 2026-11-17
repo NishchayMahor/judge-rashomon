@@ -1,0 +1,78 @@
+{
+ "best": "nemotron-pair",
+ "R": [
+  "nemotron-pair"
+ ],
+ "kappa": {
+  "gpt-pair": 0.2949822661967535,
+  "gpt-point": 0.15612327249725433,
+  "nemotron-pair": 0.3537142288597122,
+  "nemotron-point": 0.1953183190739808
+ },
+ "gap_se": {
+  "gpt-pair": 0.026583700426574795,
+  "gpt-point": 0.02274439156367904,
+  "nemotron-pair": 0.0,
+  "nemotron-point": 0.021089835703861685
+ },
+ "n_units": 0,
+ "flip": NaN,
+ "flip_all": 0.2196969696969697,
+ "slope": NaN,
+ "p_at_005": NaN,
+ "p_at_020": NaN,
+ "units": {
+  "flip": [],
+  "margin": []
+ },
+ "perm_null_mean": NaN,
+ "perm_p": NaN,
+ "perm_null_band": [
+  NaN,
+  NaN
+ ],
+ "perm_null_slope_mean": NaN,
+ "slope_perm_p": NaN,
+ "ci": {
+  "flip": [
+   0.08113738738738739,
+   0.34372767857142855
+  ],
+  "flip_all": [
+   0.14893248914083781,
+   0.3020418792517007
+  ],
+  "slope": [
+   -25.571207817064888,
+   2.789733964354149
+  ],
+  "p_at_005": [
+   0.08840050032188322,
+   0.4604712823948567
+  ],
+  "p_at_020": [
+   0.0044069678848436735,
+   0.2674879175959414
+  ]
+ },
+ "slope_upper_95_one_sided": 0.2126891983797502,
+ "contrast_all_minus_R": [
+  -0.08028276071754332,
+  0.11996318277310918
+ ],
+ "membership_freq": {
+  "gpt-pair": 0.2645,
+  "gpt-point": 0.0,
+  "nemotron-pair": 0.9965,
+  "nemotron-point": 0.0
+ },
+ "H1": false,
+ "H2": false,
+ "H3": false,
+ "eligible": [
+  "gpt-pair",
+  "gpt-point",
+  "nemotron-pair",
+  "nemotron-point"
+ ]
+}
